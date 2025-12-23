@@ -1,4 +1,4 @@
-import { Button } from '@jobflow/shared/ui'
+import { Button } from '../../packages/shared/dist/ui/index.mjs'
 
 export default function Home() {
   return (

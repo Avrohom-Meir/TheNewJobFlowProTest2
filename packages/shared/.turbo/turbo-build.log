@@ -17,10 +17,4 @@
 [32mESM[39m [1mdist/ui/index.mjs.map    [22m[32m2.90 KB[39m
 [32mESM[39m [1mdist/types/index.mjs.map [22m[32m71.00 B[39m
 [32mESM[39m [1mdist/auth/index.mjs.map  [22m[32m315.00 B[39m
-[32mESM[39m ⚡️ Build success in 93ms
-[34mDTS[39m Build start
-[32mDTS[39m ⚡️ Build success in 6289ms
-[32mDTS[39m [1mdist/index.d.mts       [22m[32m245.00 B[39m
-[32mDTS[39m [1mdist/types/index.d.mts [22m[32m362.00 B[39m
-[32mDTS[39m [1mdist/auth/index.d.mts  [22m[32m188.00 B[39m
-[32mDTS[39m [1mdist/ui/index.d.mts    [22m[32m722.00 B[39m
+[32mESM[39m ⚡️ Build success in 103ms
