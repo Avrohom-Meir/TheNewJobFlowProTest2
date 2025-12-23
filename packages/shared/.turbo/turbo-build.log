@@ -1,0 +1,26 @@
+
+> @jobflow/shared@0.0.0 build /workspaces/TheNewJobFlowProTest2/packages/shared
+> tsup
+
+[34mCLI[39m Building entry: src/index.ts, src/ui/index.ts, src/types/index.ts, src/auth/index.ts
+[34mCLI[39m Using tsconfig: tsconfig.json
+[34mCLI[39m tsup v7.3.0
+[34mCLI[39m Using tsup config: /workspaces/TheNewJobFlowProTest2/packages/shared/tsup.config.ts
+[34mCLI[39m Target: es2022
+[34mCLI[39m Cleaning output folder
+[34mESM[39m Build start
+[32mESM[39m [1mdist/index.mjs           [22m[32m1.88 KB[39m
+[32mESM[39m [1mdist/types/index.mjs     [22m[32m34.00 B[39m
+[32mESM[39m [1mdist/auth/index.mjs      [22m[32m132.00 B[39m
+[32mESM[39m [1mdist/ui/index.mjs        [22m[32m1.80 KB[39m
+[32mESM[39m [1mdist/index.mjs.map       [22m[32m3.14 KB[39m
+[32mESM[39m [1mdist/types/index.mjs.map [22m[32m71.00 B[39m
+[32mESM[39m [1mdist/auth/index.mjs.map  [22m[32m315.00 B[39m
+[32mESM[39m [1mdist/ui/index.mjs.map    [22m[32m2.90 KB[39m
+[32mESM[39m ⚡️ Build success in 119ms
+[34mDTS[39m Build start
+[32mDTS[39m ⚡️ Build success in 6428ms
+[32mDTS[39m [1mdist/index.d.mts       [22m[32m245.00 B[39m
+[32mDTS[39m [1mdist/types/index.d.mts [22m[32m362.00 B[39m
+[32mDTS[39m [1mdist/auth/index.d.mts  [22m[32m188.00 B[39m
+[32mDTS[39m [1mdist/ui/index.d.mts    [22m[32m722.00 B[39m

@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../src/auth/index.ts"],"sourcesContent":["export interface AuthUser {\n  id: string\n  email: string\n  tenantId?: string\n  role: string\n}\n\nexport function isAuthenticated(): boolean {\n  // Placeholder\n  return false\n}"],"mappings":";AAOO,SAAS,kBAA2B;AAEzC,SAAO;AACT;","names":[]}
