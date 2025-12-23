@@ -1,0 +1,16 @@
+
+> saas-master-site@0.0.1 build /workspaces/TheNewJobFlowProTest2/apps/saas-master-site
+> next build
+
+  [1m[38;2;173;127;168m ▲ Next.js 14.0.0[39m[22m
+
+[?25l [37m[1m [22m[39m Creating an optimized production build  [36m.[39m[2K[1G [37m[1m [22m[39m Creating an optimized production build  [36m..[39m[2K[1G [37m[1m [22m[39m Creating an optimized production build  [36m...[39m[2K[1G [37m[1m [22m[39m Creating an optimized production build  [36m.[39m[2K[1G [37m[1m [22m[39m Creating an optimized production build  [36m..[39m[2K[1G[?25h[31mFailed to compile.
+[39m
+[?25l [37m[1m [22m[39m Creating an optimized production build  [36m.[39m[2K[1G[?25h./app/page.tsx
+[31m[1mModule not found[22m[39m: Can't resolve '[32m@jobflow/shared/ui[39m'
+
+https://nextjs.org/docs/messages/module-not-found
+[?25l [37m[1m [22m[39m Creating an optimized production build  [36m.[39m[2K[1G[?25h
+[?25l [37m[1m [22m[39m Creating an optimized production build  [36m.[39m[2K[1G[?25h
+[?25l [37m[1m [22m[39m Creating an optimized production build  [36m.[39m[2K[1G[?25h> Build failed because of webpack errors
+[?25l [37m[1m [22m[39m Creating an optimized production build  [36m.[39m[?25h[41m[30m ELIFECYCLE [39m[49m [31mCommand failed with exit code 1.[39m

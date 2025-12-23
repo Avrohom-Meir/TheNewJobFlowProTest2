@@ -13,7 +13,12 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true
+    "noEmit": true,
+    "baseUrl": ".",
+    "paths": {
+      "@jobflow/db-master": ["../../db-master/dist/index.d.mts"],
+      "@jobflow/db-tenant": ["../../db-tenant/dist/index.d.mts"]
+    }
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]

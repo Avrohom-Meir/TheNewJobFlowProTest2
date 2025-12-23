@@ -20,7 +20,9 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@jobflow/shared": ["../../packages/shared/dist/index.d.mts"],
+      "@jobflow/server": ["../../packages/server/dist/index.mjs"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

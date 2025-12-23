@@ -18,6 +18,8 @@
     "zod": "^3.22.0"
   },
   "devDependencies": {
+    "@jobflow/db-master": "workspace:*",
+    "@jobflow/db-tenant": "workspace:*",
     "tsup": "^7.2.0",
     "typescript": "^5.0.0",
     "eslint": "^8.0.0",
