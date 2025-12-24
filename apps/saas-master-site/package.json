@@ -16,6 +16,8 @@
     "react-dom": "^19.2.1",
     "@jobflow/shared": "workspace:*",
     "@jobflow/server": "workspace:*",
+    "@jobflow/db-master": "workspace:*",
+    "@jobflow/db-tenant": "workspace:*",
     "tailwindcss": "^3.3.0",
     "autoprefixer": "^10.4.0",
     "postcss": "^8.4.0"

@@ -1,4 +1,4 @@
-import { Button } from '../../packages/shared/dist/ui/index.mjs'
+import { Button } from '@jobflow/shared/ui'
 
 export default function Home() {
   return (
@@ -10,6 +10,7 @@ export default function Home() {
           <div className="space-x-4">
             <Button variant="ghost">Login</Button>
             <Button>Sign Up</Button>
+            <a href="/dashboard" className="text-blue-600 hover:underline">Dashboard</a>
           </div>
         </nav>
       </header>

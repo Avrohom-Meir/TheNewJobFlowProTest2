@@ -4,6 +4,8 @@ export const tenants = pgTable('tenants', {
   id: serial('id').primaryKey(),
   name: text('name').notNull(),
   subdomain: text('subdomain').notNull().unique(),
+  dbUrl: text('db_url'),
+  ownerEmail: text('owner_email'),
   status: text('status').notNull(), // Provisioning/Active/Suspended
   createdAt: timestamp('created_at').defaultNow().notNull(),
   plan: text('plan').notNull(),
