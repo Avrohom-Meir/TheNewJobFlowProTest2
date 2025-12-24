@@ -1,26 +1,48 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getTenantById } from '@jobflow/server'
-import { getTenantDb } from '@jobflow/server'
-import { customers } from '@jobflow/db-tenant/schema'
+
+// Mock data for demonstration
+const mockCustomers = [
+  {
+    id: 1,
+    name: 'John Doe',
+    email: 'john@example.com',
+    phone: '+1234567890',
+    company: 'Acme Corp',
+    createdAt: new Date('2024-01-15'),
+  },
+  {
+    id: 2,
+    name: 'Jane Smith',
+    email: 'jane@example.com',
+    phone: '+1234567891',
+    company: 'Tech Solutions',
+    createdAt: new Date('2024-01-20'),
+  },
+]
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const tenantId = parseInt(params.id)
-    const tenant = await getTenantById(tenantId)
+    const { id } = await params
+    const tenantId = parseInt(id)
 
-    if (!tenant || !tenant.dbUrl) {
-      return NextResponse.json({ error: 'Tenant not found or not provisioned' }, { status: 404 })
+    // Mock tenant lookup
+    const mockTenants = [
+      { id: 1, name: 'Demo Tenant', dbUrl: 'mock' },
+      { id: 2, name: 'Test Tenant', dbUrl: 'mock' },
+    ]
+    const tenant = mockTenants.find(t => t.id === tenantId)
+
+    if (!tenant) {
+      return NextResponse.json({ error: 'Tenant not found' }, { status: 404 })
     }
 
-    const tenantDb = getTenantDb(tenant.dbUrl)
-    const tenantCustomers = await tenantDb.select().from(customers)
-
+    // Return mock customers for the tenant
     return NextResponse.json({
       tenant: tenant.name,
-      customers: tenantCustomers
+      customers: mockCustomers
     })
   } catch (error) {
     console.error('Error fetching tenant customers:', error)

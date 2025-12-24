@@ -11,23 +11,24 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "next": "15.1.9",
-    "react": "^19.2.1",
-    "react-dom": "^19.2.1",
-    "@jobflow/shared": "workspace:*",
-    "@jobflow/server": "workspace:*",
     "@jobflow/db-master": "workspace:*",
     "@jobflow/db-tenant": "workspace:*",
-    "tailwindcss": "^3.3.0",
+    "@jobflow/server": "workspace:*",
+    "@jobflow/shared": "workspace:*",
     "autoprefixer": "^10.4.0",
-    "postcss": "^8.4.0"
+    "drizzle-orm": "^0.29.0",
+    "next": "15.1.9",
+    "postcss": "^8.4.0",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
+    "tailwindcss": "^3.3.0"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "typescript": "^5.0.0",
     "eslint": "^8.0.0",
-    "eslint-config-next": "15.1.9"
+    "eslint-config-next": "15.1.9",
+    "typescript": "^5.0.0"
   }
 }

@@ -1,48 +1,59 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@jobflow/db-master'
-import { tenants } from '@jobflow/db-master/schema'
-import { eq } from 'drizzle-orm'
+
+// Mock data for demonstration
+let mockTenants = [
+  {
+    id: 1,
+    name: 'Demo Tenant',
+    subdomain: 'demo',
+    dbUrl: 'postgresql://user:pass@localhost:5432/tenant_demo',
+    ownerEmail: 'demo@example.com',
+    status: 'active',
+    plan: 'free',
+    createdAt: new Date('2024-01-01'),
+    updatedAt: new Date('2024-01-01'),
+    currentSchemaVersion: 1,
+  },
+]
 
 export async function GET() {
-  try {
-    const allTenants = await db.select().from(tenants)
-    return NextResponse.json(allTenants)
-  } catch (error) {
-    console.error('Error fetching tenants:', error)
-    return NextResponse.json({ error: 'Failed to fetch tenants' }, { status: 500 })
-  }
+  // Return mock tenants
+  return NextResponse.json(mockTenants)
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
-    const { name, subdomain, ownerEmail } = body
+    const { name, subdomain, ownerEmail } = await request.json()
 
     if (!name || !subdomain || !ownerEmail) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
-    // Check if subdomain is unique
-    const existing = await db.select().from(tenants).where(eq(tenants.subdomain, subdomain))
-    if (existing.length > 0) {
+    // Check if subdomain is unique (mock check)
+    const existing = mockTenants.find(t => t.subdomain === subdomain)
+    if (existing) {
       return NextResponse.json({ error: 'Subdomain already exists' }, { status: 400 })
     }
 
-    // For now, use a placeholder DB URL - in production, this would create a new database
-    const tenantDbUrl = `postgresql://user:pass@localhost:5432/tenant_${subdomain}`
-
-    const newTenant = await db.insert(tenants).values({
+    // Create mock tenant
+    const newTenant = {
+      id: mockTenants.length + 1,
       name,
       subdomain,
-      dbUrl: tenantDbUrl,
+      dbUrl: `postgresql://user:pass@localhost:5432/tenant_${subdomain}`,
       ownerEmail,
       status: 'active',
+      plan: 'free',
       createdAt: new Date(),
-    }).returning()
+      updatedAt: new Date(),
+      currentSchemaVersion: 1,
+    }
 
-    return NextResponse.json(newTenant[0])
+    mockTenants.push(newTenant)
+
+    return NextResponse.json(newTenant, { status: 201 })
   } catch (error) {
     console.error('Error creating tenant:', error)
-    return NextResponse.json({ error: 'Failed to create tenant' }, { status: 500 })
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

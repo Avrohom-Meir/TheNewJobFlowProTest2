@@ -6,20 +6,20 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
     },
     "./ui": {
-      "types": "./dist/ui/index.d.ts",
-      "import": "./dist/ui/index.js"
+      "types": "./dist/ui/index.d.mts",
+      "import": "./dist/ui/index.mjs"
     },
     "./types": {
-      "types": "./dist/types/index.d.ts",
-      "import": "./dist/types/index.js"
+      "types": "./dist/types/index.d.mts",
+      "import": "./dist/types/index.mjs"
     },
     "./auth": {
-      "types": "./dist/auth/index.d.ts",
-      "import": "./dist/auth/index.js"
+      "types": "./dist/auth/index.d.mts",
+      "import": "./dist/auth/index.mjs"
     }
   },
   "scripts": {

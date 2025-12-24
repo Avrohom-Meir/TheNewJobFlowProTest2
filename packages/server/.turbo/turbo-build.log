@@ -2,13 +2,22 @@
 > @jobflow/server@0.0.0 build /workspaces/TheNewJobFlowProTest2/packages/server
 > tsup
 
-[34mCLI[39m Building entry: src/index.ts
-[34mCLI[39m Using tsconfig: tsconfig.json
-[34mCLI[39m tsup v7.3.0
-[34mCLI[39m Using tsup config: /workspaces/TheNewJobFlowProTest2/packages/server/tsup.config.ts
-[34mCLI[39m Target: es2022
-[34mCLI[39m Cleaning output folder
-[34mESM[39m Build start
-[32mESM[39m [1mdist/index.mjs     [22m[32m1.13 KB[39m
-[32mESM[39m [1mdist/index.mjs.map [22m[32m1.91 KB[39m
-[32mESM[39m ⚡️ Build success in 40ms
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mExpected identifier but found end of file[0m
+
+    tsup.config.ts:9:14:
+[37m      9 │   clean: true,[32m[37m
+        ╵               [32m^[0m
+
+[31mError: Build failed with 1 error:
+tsup.config.ts:9:14: ERROR: Expected identifier but found end of file
+    at failureErrorWithLog (/workspaces/TheNewJobFlowProTest2/node_modules/.pnpm/esbuild@0.19.12/node_modules/esbuild/lib/main.js:1651:15)
+    at /workspaces/TheNewJobFlowProTest2/node_modules/.pnpm/esbuild@0.19.12/node_modules/esbuild/lib/main.js:1059:25
+    at runOnEndCallbacks (/workspaces/TheNewJobFlowProTest2/node_modules/.pnpm/esbuild@0.19.12/node_modules/esbuild/lib/main.js:1486:45)
+    at buildResponseToResult (/workspaces/TheNewJobFlowProTest2/node_modules/.pnpm/esbuild@0.19.12/node_modules/esbuild/lib/main.js:1057:7)
+    at /workspaces/TheNewJobFlowProTest2/node_modules/.pnpm/esbuild@0.19.12/node_modules/esbuild/lib/main.js:1086:16
+    at responseCallbacks.<computed> (/workspaces/TheNewJobFlowProTest2/node_modules/.pnpm/esbuild@0.19.12/node_modules/esbuild/lib/main.js:704:9)
+    at handleIncomingPacket (/workspaces/TheNewJobFlowProTest2/node_modules/.pnpm/esbuild@0.19.12/node_modules/esbuild/lib/main.js:764:9)
+    at Socket.readFromStdout (/workspaces/TheNewJobFlowProTest2/node_modules/.pnpm/esbuild@0.19.12/node_modules/esbuild/lib/main.js:680:7)
+    at Socket.emit (node:events:508:28)
+    at addChunk (node:internal/streams/readable:559:12)[39m
+[41m[30m ELIFECYCLE [39m[49m [31mCommand failed with exit code 1.[39m
