@@ -96,11 +96,41 @@ export async function POST(request: NextRequest) {
       await masterClient`CREATE SCHEMA IF NOT EXISTS ${masterClient.unsafe(schemaName)}`
       await masterClient.end()
 
-      // Apply tenant schema to the new schema
+      // Apply tenant schema to the new schema using Drizzle
+      const { drizzle } = await import('drizzle-orm/postgres-js')
+      const * as schema from '@jobflow/db-tenant/schema'
       const tenantClient = postgres(dbUrl)
+      const db = drizzle(tenantClient, { schema })
+      
+      // Use Drizzle to create all tables in the correct schema
+      await tenantClient`SET search_path TO ${tenantClient.unsafe(schemaName)}`
+      
+      // Apply the base migration
       const migrationPath = path.join(process.cwd(), '../../packages/db-tenant/drizzle/0000_colossal_blue_marvel.sql')
       const migrationSQL = fs.readFileSync(migrationPath, 'utf-8')
       await tenantClient.unsafe(migrationSQL)
+      
+      // Apply the customer table updates
+      const updateMigrationPath = path.join(process.cwd(), '../../packages/db-tenant/drizzle/0001_manual_customer_migration.sql')
+      const updateMigrationSQL = fs.readFileSync(updateMigrationPath, 'utf-8')
+      
+      // Execute each statement from the manual migration
+      const statements = updateMigrationSQL
+        .split(';')
+        .map(s => s.trim())
+        .filter(s => s.length > 0 && !s.startsWith('--'))
+      
+      for (const statement of statements) {
+        try {
+          await tenantClient.unsafe(statement)
+        } catch (err: any) {
+          // Ignore errors for already existing constraints/columns
+          if (!err.code?.match(/42701|42710|42P07/)) {
+            throw err
+          }
+        }
+      }
+      
       await tenantClient.end()
 
       // Update tenant with dbUrl and status
