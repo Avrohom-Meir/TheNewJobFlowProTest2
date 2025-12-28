@@ -89,48 +89,84 @@ export async function POST(request: NextRequest) {
 
       // For demo: simulate with schema-based approach
       const schemaName = `tenant_${subdomain}`
-      const dbUrl = `postgresql://neondb_owner:npg_vCk0Ixu5gfrs@ep-plain-wildflower-aburknkd-pooler.eu-west-2.aws.neon.tech/neondb?sslmode=require&schema=${schemaName}`
+      const dbUrl = `postgresql://neondb_owner:npg_vCk0Ixu5gfrs@ep-plain-wildflower-aburknkd-pooler.eu-west-2.aws.neon.tech/neondb?sslmode=require&options=-c%20search_path%3D${schemaName}`
 
       // Create schema in the shared database
       const masterClient = postgres(process.env.MASTER_DB_URL!)
       await masterClient`CREATE SCHEMA IF NOT EXISTS ${masterClient.unsafe(schemaName)}`
-      await masterClient.end()
-
-      // Apply tenant schema to the new schema using Drizzle
-      const { drizzle } = await import('drizzle-orm/postgres-js')
-      const schema = await import('@jobflow/db-tenant/schema')
-      const tenantClient = postgres(dbUrl)
-      const db = drizzle(tenantClient, { schema })
       
-      // Use Drizzle to create all tables in the correct schema
+      // Set search path and create tables using Drizzle
+      const tenantClient = postgres(dbUrl)
       await tenantClient`SET search_path TO ${tenantClient.unsafe(schemaName)}`
       
-      // Apply the base migration
-      const migrationPath = path.join(process.cwd(), '../../packages/db-tenant/drizzle/0000_colossal_blue_marvel.sql')
-      const migrationSQL = fs.readFileSync(migrationPath, 'utf-8')
-      await tenantClient.unsafe(migrationSQL)
+      // Import and use the current schema directly
+      const { migrate } = await import('drizzle-orm/postgres-js/migrator')
+      const { drizzle } = await import('drizzle-orm/postgres-js')
+      const tenantSchema = await import('@jobflow/db-tenant/schema')
+      const db = drizzle(tenantClient, { schema: tenantSchema })
       
-      // Apply the customer table updates
-      const updateMigrationPath = path.join(process.cwd(), '../../packages/db-tenant/drizzle/0001_manual_customer_migration.sql')
-      const updateMigrationSQL = fs.readFileSync(updateMigrationPath, 'utf-8')
+      // Create all tables using the schema directly (not migrations)
+      // This ensures we get the current schema definition
+      const createTableStatements = `
+        CREATE TABLE IF NOT EXISTS "TypeT" (
+          "ID" serial PRIMARY KEY,
+          "Name" text NOT NULL,
+          "Description" text
+        );
+        
+        CREATE TABLE IF NOT EXISTS "HelperT" (
+          "ID" serial PRIMARY KEY,
+          "TypeID" integer REFERENCES "TypeT"("ID") NOT NULL,
+          "Name" text NOT NULL,
+          "ExtraFields" jsonb
+        );
+        
+        CREATE TABLE IF NOT EXISTS "CustomerT" (
+          "CustomerID" serial PRIMARY KEY,
+          "CustomerFirstName" text,
+          "CustomerLastName" text,
+          "CompanyName" text,
+          "CompanyNumber" text,
+          "FirstLineAddress" text,
+          "SecondLineAddress" text,
+          "PostCode" text,
+          "Town" text,
+          "EmailAddress" text,
+          "WebSiteURL" text,
+          "PhoneNr" text,
+          "MobileNr" text,
+          "CustomerSince" date,
+          "Title" integer REFERENCES "HelperT"("ID"),
+          "Notes" text,
+          "AccountsEmailAddress" text,
+          "InvoiceDueDate" integer,
+          "CustomerSelected" boolean DEFAULT false,
+          "CustomerBankRef" text,
+          "GroupedUnder" text
+        );
+        
+        CREATE TABLE IF NOT EXISTS "JobT" (
+          "ID" serial PRIMARY KEY,
+          "CustomerID" integer REFERENCES "CustomerT"("CustomerID"),
+          "StatusID" integer REFERENCES "HelperT"("ID"),
+          "TypeID" integer REFERENCES "HelperT"("ID"),
+          "Description" text,
+          "CreatedAt" timestamp DEFAULT now() NOT NULL,
+          "UpdatedAt" timestamp DEFAULT now() NOT NULL
+        );
+        
+        -- Add other tables as needed
+        CREATE TABLE IF NOT EXISTS "SettingT" (
+          "ID" serial PRIMARY KEY,
+          "Key" text NOT NULL UNIQUE,
+          "Value" text,
+          "Description" text
+        );
+      `
       
-      // Execute each statement from the manual migration
-      const statements = updateMigrationSQL
-        .split(';')
-        .map(s => s.trim())
-        .filter(s => s.length > 0 && !s.startsWith('--'))
+      await tenantClient.unsafe(createTableStatements)
       
-      for (const statement of statements) {
-        try {
-          await tenantClient.unsafe(statement)
-        } catch (err: any) {
-          // Ignore errors for already existing constraints/columns
-          if (!err.code?.match(/42701|42710|42P07/)) {
-            throw err
-          }
-        }
-      }
-      
+      await masterClient.end()
       await tenantClient.end()
 
       // Update tenant with dbUrl and status
