@@ -1,0 +1,1295 @@
+{
+  "id": "08ce43b0-ad25-43c8-a478-c11492e35ba9",
+  "prevId": "bf952101-ffe3-4126-942f-d40d15570bf3",
+  "version": "5",
+  "dialect": "pg",
+  "tables": {
+    "ActiveJobT": {
+      "name": "ActiveJobT",
+      "schema": "",
+      "columns": {
+        "ID": {
+          "name": "ID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "JobID": {
+          "name": "JobID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "ActiveJobT_JobID_JobT_ID_fk": {
+          "name": "ActiveJobT_JobID_JobT_ID_fk",
+          "tableFrom": "ActiveJobT",
+          "tableTo": "JobT",
+          "columnsFrom": [
+            "JobID"
+          ],
+          "columnsTo": [
+            "ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "AppointmentColourT": {
+      "name": "AppointmentColourT",
+      "schema": "",
+      "columns": {
+        "ID": {
+          "name": "ID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "TypeID": {
+          "name": "TypeID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Colour": {
+          "name": "Colour",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "AppointmentColourT_TypeID_HelperT_ID_fk": {
+          "name": "AppointmentColourT_TypeID_HelperT_ID_fk",
+          "tableFrom": "AppointmentColourT",
+          "tableTo": "HelperT",
+          "columnsFrom": [
+            "TypeID"
+          ],
+          "columnsTo": [
+            "ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "AppointmentT": {
+      "name": "AppointmentT",
+      "schema": "",
+      "columns": {
+        "ID": {
+          "name": "ID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "JobID": {
+          "name": "JobID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "TypeID": {
+          "name": "TypeID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Date": {
+          "name": "Date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Time": {
+          "name": "Time",
+          "type": "time",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Notes": {
+          "name": "Notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Confirmed": {
+          "name": "Confirmed",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "AppointmentT_JobID_JobT_ID_fk": {
+          "name": "AppointmentT_JobID_JobT_ID_fk",
+          "tableFrom": "AppointmentT",
+          "tableTo": "JobT",
+          "columnsFrom": [
+            "JobID"
+          ],
+          "columnsTo": [
+            "ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "AppointmentT_TypeID_HelperT_ID_fk": {
+          "name": "AppointmentT_TypeID_HelperT_ID_fk",
+          "tableFrom": "AppointmentT",
+          "tableTo": "HelperT",
+          "columnsFrom": [
+            "TypeID"
+          ],
+          "columnsTo": [
+            "ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "CustomerT": {
+      "name": "CustomerT",
+      "schema": "",
+      "columns": {
+        "CustomerID": {
+          "name": "CustomerID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "CustomerFirstName": {
+          "name": "CustomerFirstName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "CustomerLastName": {
+          "name": "CustomerLastName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "CompanyName": {
+          "name": "CompanyName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "CompanyNumber": {
+          "name": "CompanyNumber",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "FirstLineAddress": {
+          "name": "FirstLineAddress",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "SecondLineAddress": {
+          "name": "SecondLineAddress",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "PostCode": {
+          "name": "PostCode",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Town": {
+          "name": "Town",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "EmailAddress": {
+          "name": "EmailAddress",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "WebSiteURL": {
+          "name": "WebSiteURL",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "PhoneNr": {
+          "name": "PhoneNr",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "MobileNr": {
+          "name": "MobileNr",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "CustomerSince": {
+          "name": "CustomerSince",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Title": {
+          "name": "Title",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Notes": {
+          "name": "Notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "AccountsEmailAddress": {
+          "name": "AccountsEmailAddress",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "InvoiceDueDate": {
+          "name": "InvoiceDueDate",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "CustomerSelected": {
+          "name": "CustomerSelected",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "CustomerBankRef": {
+          "name": "CustomerBankRef",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "GroupedUnder": {
+          "name": "GroupedUnder",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "CustomerT_Title_HelperT_ID_fk": {
+          "name": "CustomerT_Title_HelperT_ID_fk",
+          "tableFrom": "CustomerT",
+          "tableTo": "HelperT",
+          "columnsFrom": [
+            "Title"
+          ],
+          "columnsTo": [
+            "ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "DevTranslationT": {
+      "name": "DevTranslationT",
+      "schema": "",
+      "columns": {
+        "ID": {
+          "name": "ID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "Key": {
+          "name": "Key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Value": {
+          "name": "Value",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "ExpenseT": {
+      "name": "ExpenseT",
+      "schema": "",
+      "columns": {
+        "ID": {
+          "name": "ID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "JobID": {
+          "name": "JobID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Description": {
+          "name": "Description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Amount": {
+          "name": "Amount",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Receipt": {
+          "name": "Receipt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Date": {
+          "name": "Date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "ExpenseT_JobID_JobT_ID_fk": {
+          "name": "ExpenseT_JobID_JobT_ID_fk",
+          "tableFrom": "ExpenseT",
+          "tableTo": "JobT",
+          "columnsFrom": [
+            "JobID"
+          ],
+          "columnsTo": [
+            "ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "HelperT": {
+      "name": "HelperT",
+      "schema": "",
+      "columns": {
+        "ID": {
+          "name": "ID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "TypeID": {
+          "name": "TypeID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Name": {
+          "name": "Name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ExtraFields": {
+          "name": "ExtraFields",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "HelperT_TypeID_TypeT_ID_fk": {
+          "name": "HelperT_TypeID_TypeT_ID_fk",
+          "tableFrom": "HelperT",
+          "tableTo": "TypeT",
+          "columnsFrom": [
+            "TypeID"
+          ],
+          "columnsTo": [
+            "ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "JobDetailT": {
+      "name": "JobDetailT",
+      "schema": "",
+      "columns": {
+        "ID": {
+          "name": "ID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "JobID": {
+          "name": "JobID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Description": {
+          "name": "Description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Quantity": {
+          "name": "Quantity",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Price": {
+          "name": "Price",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "JobDetailT_JobID_JobT_ID_fk": {
+          "name": "JobDetailT_JobID_JobT_ID_fk",
+          "tableFrom": "JobDetailT",
+          "tableTo": "JobT",
+          "columnsFrom": [
+            "JobID"
+          ],
+          "columnsTo": [
+            "ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "JobLableT": {
+      "name": "JobLableT",
+      "schema": "",
+      "columns": {
+        "ID": {
+          "name": "ID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "JobID": {
+          "name": "JobID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Label": {
+          "name": "Label",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "JobLableT_JobID_JobT_ID_fk": {
+          "name": "JobLableT_JobID_JobT_ID_fk",
+          "tableFrom": "JobLableT",
+          "tableTo": "JobT",
+          "columnsFrom": [
+            "JobID"
+          ],
+          "columnsTo": [
+            "ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "JobT": {
+      "name": "JobT",
+      "schema": "",
+      "columns": {
+        "ID": {
+          "name": "ID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "CustomerID": {
+          "name": "CustomerID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "StatusID": {
+          "name": "StatusID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "TypeID": {
+          "name": "TypeID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Description": {
+          "name": "Description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "CreatedAt": {
+          "name": "CreatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "UpdatedAt": {
+          "name": "UpdatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "JobT_CustomerID_CustomerT_CustomerID_fk": {
+          "name": "JobT_CustomerID_CustomerT_CustomerID_fk",
+          "tableFrom": "JobT",
+          "tableTo": "CustomerT",
+          "columnsFrom": [
+            "CustomerID"
+          ],
+          "columnsTo": [
+            "CustomerID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "JobT_StatusID_HelperT_ID_fk": {
+          "name": "JobT_StatusID_HelperT_ID_fk",
+          "tableFrom": "JobT",
+          "tableTo": "HelperT",
+          "columnsFrom": [
+            "StatusID"
+          ],
+          "columnsTo": [
+            "ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "JobT_TypeID_HelperT_ID_fk": {
+          "name": "JobT_TypeID_HelperT_ID_fk",
+          "tableFrom": "JobT",
+          "tableTo": "HelperT",
+          "columnsFrom": [
+            "TypeID"
+          ],
+          "columnsTo": [
+            "ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "LetterT": {
+      "name": "LetterT",
+      "schema": "",
+      "columns": {
+        "ID": {
+          "name": "ID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "TypeID": {
+          "name": "TypeID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Content": {
+          "name": "Content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Placeholders": {
+          "name": "Placeholders",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "LetterT_TypeID_TypeT_ID_fk": {
+          "name": "LetterT_TypeID_TypeT_ID_fk",
+          "tableFrom": "LetterT",
+          "tableTo": "TypeT",
+          "columnsFrom": [
+            "TypeID"
+          ],
+          "columnsTo": [
+            "ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "MaintenanceT": {
+      "name": "MaintenanceT",
+      "schema": "",
+      "columns": {
+        "ID": {
+          "name": "ID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "JobID": {
+          "name": "JobID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Issue": {
+          "name": "Issue",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Resolved": {
+          "name": "Resolved",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "ResolvedAt": {
+          "name": "ResolvedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "MaintenanceT_JobID_JobT_ID_fk": {
+          "name": "MaintenanceT_JobID_JobT_ID_fk",
+          "tableFrom": "MaintenanceT",
+          "tableTo": "JobT",
+          "columnsFrom": [
+            "JobID"
+          ],
+          "columnsTo": [
+            "ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "OnSiteNoteT": {
+      "name": "OnSiteNoteT",
+      "schema": "",
+      "columns": {
+        "ID": {
+          "name": "ID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "JobID": {
+          "name": "JobID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Note": {
+          "name": "Note",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Media": {
+          "name": "Media",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "CreatedAt": {
+          "name": "CreatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "CreatedBy": {
+          "name": "CreatedBy",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "OnSiteNoteT_JobID_JobT_ID_fk": {
+          "name": "OnSiteNoteT_JobID_JobT_ID_fk",
+          "tableFrom": "OnSiteNoteT",
+          "tableTo": "JobT",
+          "columnsFrom": [
+            "JobID"
+          ],
+          "columnsTo": [
+            "ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "PaymentT": {
+      "name": "PaymentT",
+      "schema": "",
+      "columns": {
+        "ID": {
+          "name": "ID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "JobID": {
+          "name": "JobID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Amount": {
+          "name": "Amount",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "MethodID": {
+          "name": "MethodID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Date": {
+          "name": "Date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "PaymentT_JobID_JobT_ID_fk": {
+          "name": "PaymentT_JobID_JobT_ID_fk",
+          "tableFrom": "PaymentT",
+          "tableTo": "JobT",
+          "columnsFrom": [
+            "JobID"
+          ],
+          "columnsTo": [
+            "ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "PaymentT_MethodID_HelperT_ID_fk": {
+          "name": "PaymentT_MethodID_HelperT_ID_fk",
+          "tableFrom": "PaymentT",
+          "tableTo": "HelperT",
+          "columnsFrom": [
+            "MethodID"
+          ],
+          "columnsTo": [
+            "ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "QuoteT": {
+      "name": "QuoteT",
+      "schema": "",
+      "columns": {
+        "ID": {
+          "name": "ID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "JobID": {
+          "name": "JobID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Total": {
+          "name": "Total",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Status": {
+          "name": "Status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Draft'"
+        },
+        "CreatedAt": {
+          "name": "CreatedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "QuoteT_JobID_JobT_ID_fk": {
+          "name": "QuoteT_JobID_JobT_ID_fk",
+          "tableFrom": "QuoteT",
+          "tableTo": "JobT",
+          "columnsFrom": [
+            "JobID"
+          ],
+          "columnsTo": [
+            "ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "SettingHelperT": {
+      "name": "SettingHelperT",
+      "schema": "",
+      "columns": {
+        "ID": {
+          "name": "ID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "SettingID": {
+          "name": "SettingID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Name": {
+          "name": "Name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Value": {
+          "name": "Value",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "SettingHelperT_SettingID_SettingT_ID_fk": {
+          "name": "SettingHelperT_SettingID_SettingT_ID_fk",
+          "tableFrom": "SettingHelperT",
+          "tableTo": "SettingT",
+          "columnsFrom": [
+            "SettingID"
+          ],
+          "columnsTo": [
+            "ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "SettingT": {
+      "name": "SettingT",
+      "schema": "",
+      "columns": {
+        "ID": {
+          "name": "ID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "Key": {
+          "name": "Key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Value": {
+          "name": "Value",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Description": {
+          "name": "Description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "SettingT_Key_unique": {
+          "name": "SettingT_Key_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "Key"
+          ]
+        }
+      }
+    },
+    "StatusHistoryT": {
+      "name": "StatusHistoryT",
+      "schema": "",
+      "columns": {
+        "ID": {
+          "name": "ID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "JobID": {
+          "name": "JobID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "OldStatusID": {
+          "name": "OldStatusID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "NewStatusID": {
+          "name": "NewStatusID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ChangedAt": {
+          "name": "ChangedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "ChangedBy": {
+          "name": "ChangedBy",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "StatusHistoryT_JobID_JobT_ID_fk": {
+          "name": "StatusHistoryT_JobID_JobT_ID_fk",
+          "tableFrom": "StatusHistoryT",
+          "tableTo": "JobT",
+          "columnsFrom": [
+            "JobID"
+          ],
+          "columnsTo": [
+            "ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "StatusHistoryT_OldStatusID_HelperT_ID_fk": {
+          "name": "StatusHistoryT_OldStatusID_HelperT_ID_fk",
+          "tableFrom": "StatusHistoryT",
+          "tableTo": "HelperT",
+          "columnsFrom": [
+            "OldStatusID"
+          ],
+          "columnsTo": [
+            "ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "StatusHistoryT_NewStatusID_HelperT_ID_fk": {
+          "name": "StatusHistoryT_NewStatusID_HelperT_ID_fk",
+          "tableFrom": "StatusHistoryT",
+          "tableTo": "HelperT",
+          "columnsFrom": [
+            "NewStatusID"
+          ],
+          "columnsTo": [
+            "ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "TransactionImportT": {
+      "name": "TransactionImportT",
+      "schema": "",
+      "columns": {
+        "ID": {
+          "name": "ID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "Date": {
+          "name": "Date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Description": {
+          "name": "Description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Amount": {
+          "name": "Amount",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "MatchedJobID": {
+          "name": "MatchedJobID",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Status": {
+          "name": "Status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Unmatched'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "TransactionImportT_MatchedJobID_JobT_ID_fk": {
+          "name": "TransactionImportT_MatchedJobID_JobT_ID_fk",
+          "tableFrom": "TransactionImportT",
+          "tableTo": "JobT",
+          "columnsFrom": [
+            "MatchedJobID"
+          ],
+          "columnsTo": [
+            "ID"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "TranslationT": {
+      "name": "TranslationT",
+      "schema": "",
+      "columns": {
+        "ID": {
+          "name": "ID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "Key": {
+          "name": "Key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Value": {
+          "name": "Value",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Language": {
+          "name": "Language",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'en'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "TrustedDomainT": {
+      "name": "TrustedDomainT",
+      "schema": "",
+      "columns": {
+        "ID": {
+          "name": "ID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "Domain": {
+          "name": "Domain",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "TypeT": {
+      "name": "TypeT",
+      "schema": "",
+      "columns": {
+        "ID": {
+          "name": "ID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "Name": {
+          "name": "Name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Description": {
+          "name": "Description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "UpdateT": {
+      "name": "UpdateT",
+      "schema": "",
+      "columns": {
+        "ID": {
+          "name": "ID",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "Version": {
+          "name": "Version",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Description": {
+          "name": "Description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "AppliedAt": {
+          "name": "AppliedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

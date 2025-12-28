@@ -55,17 +55,32 @@ export const updateT = pgTable('UpdateT', {
 
 // Core Business Tables
 export const customerT = pgTable('CustomerT', {
-  id: serial('ID').primaryKey(),
-  name: text('Name').notNull(),
-  email: text('Email'),
-  phone: text('Phone'),
-  address: text('Address'),
-  createdAt: timestamp('CreatedAt').defaultNow().notNull(),
+  customerId: serial('CustomerID').primaryKey(),
+  customerFirstName: text('CustomerFirstName'),
+  customerLastName: text('CustomerLastName'),
+  companyName: text('CompanyName'),
+  companyNumber: text('CompanyNumber'),
+  firstLineAddress: text('FirstLineAddress'),
+  secondLineAddress: text('SecondLineAddress'),
+  postCode: text('PostCode'),
+  town: text('Town'),
+  emailAddress: text('EmailAddress'),
+  webSiteURL: text('WebSiteURL'),
+  phoneNr: text('PhoneNr'),
+  mobileNr: text('MobileNr'),
+  customerSince: date('CustomerSince'),
+  title: integer('Title').references(() => helperT.id), // FK to HelperT where Type = first title
+  notes: text('Notes'),
+  accountsEmailAddress: text('AccountsEmailAddress'),
+  invoiceDueDate: integer('InvoiceDueDate'),
+  customerSelected: boolean('CustomerSelected').default(false),
+  customerBankRef: text('CustomerBankRef'),
+  groupedUnder: text('GroupedUnder'),
 })
 
 export const jobT = pgTable('JobT', {
   id: serial('ID').primaryKey(),
-  customerId: integer('CustomerID').references(() => customerT.id),
+  customerId: integer('CustomerID').references(() => customerT.customerId),
   statusId: integer('StatusID').references(() => helperT.id),
   typeId: integer('TypeID').references(() => helperT.id),
   description: text('Description'),

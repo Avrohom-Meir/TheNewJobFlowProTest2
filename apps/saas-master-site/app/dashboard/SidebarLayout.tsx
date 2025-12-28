@@ -1,12 +1,17 @@
+
 import { ReactNode, useState } from 'react';
 import { Button } from '@jobflow/shared/ui';
 
+
+import CustomersTable from './CustomersTable';
+
 interface SidebarProps {
-  children: ReactNode;
+  children?: ReactNode;
 }
 
 export function SidebarLayout({ children }: SidebarProps) {
   const [collapsed, setCollapsed] = useState(false);
+  const [active, setActive] = useState<'Customers' | 'Jobs' | 'Settings'>('Customers');
   return (
     <div className="flex min-h-screen">
       <aside className={`bg-white shadow-md transition-all duration-200 ${collapsed ? 'w-16' : 'w-56'} flex flex-col`}>
@@ -19,18 +24,20 @@ export function SidebarLayout({ children }: SidebarProps) {
         <nav className="flex-1 py-4">
           <ul className="space-y-2">
             <li>
-              <a href="#" className="block px-4 py-2 rounded hover:bg-blue-50">Customers</a>
+              <button onClick={() => setActive('Customers')} className={`block w-full text-left px-4 py-2 rounded hover:bg-blue-50 ${active === 'Customers' ? 'bg-blue-100 font-semibold' : ''}`}>Customers</button>
             </li>
             <li>
-              <a href="#" className="block px-4 py-2 rounded hover:bg-blue-50">Jobs</a>
+              <button onClick={() => setActive('Jobs')} className={`block w-full text-left px-4 py-2 rounded hover:bg-blue-50 ${active === 'Jobs' ? 'bg-blue-100 font-semibold' : ''}`}>Jobs</button>
             </li>
             <li>
-              <a href="#" className="block px-4 py-2 rounded hover:bg-blue-50">Settings</a>
+              <button onClick={() => setActive('Settings')} className={`block w-full text-left px-4 py-2 rounded hover:bg-blue-50 ${active === 'Settings' ? 'bg-blue-100 font-semibold' : ''}`}>Settings</button>
             </li>
           </ul>
         </nav>
       </aside>
-      <main className="flex-1 bg-gray-50 p-8">{children}</main>
+      <main className="flex-1 bg-gray-50 p-8">
+        {active === 'Customers' ? <CustomersTable /> : children}
+      </main>
     </div>
   );
 }
