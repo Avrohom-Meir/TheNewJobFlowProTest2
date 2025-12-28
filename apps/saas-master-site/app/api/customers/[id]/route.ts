@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { customerT } from '@jobflow/db-tenant/schema'
+import { getTenantDbConnection } from '@jobflow/server'
 import { eq } from 'drizzle-orm'
 
 // GET /api/customers/[id] - Get a single customer
@@ -16,23 +17,20 @@ export async function GET(
 
     const customerId = parseInt(params.id)
     
-    // TODO: Get tenant database and fetch customer
-    // const db = await getTenantDb(tenantId)
-    // const customer = await db.select().from(customerT).where(eq(customerT.customerId, customerId)).limit(1)
+    // Get tenant database connection
+    const db = await getTenantDbConnection(parseInt(tenantId))
     
-    // Mock data for now
-    const mockCustomer = {
-      customerId,
-      customerFirstName: 'John',
-      customerLastName: 'Doe',
-      companyName: 'Acme Corp',
-      emailAddress: 'john@acme.com',
-      phoneNr: '555-0100',
-      customerSince: '2024-01-15',
-      customerSelected: false,
+    const [customer] = await db
+      .select()
+      .from(customerT)
+      .where(eq(customerT.customerId, customerId))
+      .limit(1)
+    
+    if (!customer) {
+      return NextResponse.json({ error: 'Customer not found' }, { status: 404 })
     }
 
-    return NextResponse.json(mockCustomer)
+    return NextResponse.json(customer)
   } catch (error) {
     console.error('Error fetching customer:', error)
     return NextResponse.json({ error: 'Failed to fetch customer' }, { status: 500 })
@@ -54,13 +52,22 @@ export async function PUT(
 
     const customerId = parseInt(params.id)
     
-    // TODO: Get tenant database and update customer
-    // const db = await getTenantDb(tenantId)
-    // const updated = await db.update(customerT).set(body).where(eq(customerT.customerId, customerId)).returning()
+    // Get tenant database connection
+    const db = await getTenantDbConnection(parseInt(tenantId))
+    
+    const [updated] = await db
+      .update(customerT)
+      .set(body)
+      .where(eq(customerT.customerId, customerId))
+      .returning()
+    
+    if (!updated) {
+      return NextResponse.json({ error: 'Customer not found' }, { status: 404 })
+    }
 
     return NextResponse.json({
       message: 'Customer updated successfully',
-      customer: { ...body, customerId },
+      customer: updated,
     })
   } catch (error) {
     console.error('Error updating customer:', error)
@@ -82,9 +89,17 @@ export async function DELETE(
 
     const customerId = parseInt(params.id)
     
-    // TODO: Get tenant database and delete customer
-    // const db = await getTenantDb(tenantId)
-    // await db.delete(customerT).where(eq(customerT.customerId, customerId))
+    // Get tenant database connection
+    const db = await getTenantDbConnection(parseInt(tenantId))
+    
+    const [deleted] = await db
+      .delete(customerT)
+      .where(eq(customerT.customerId, customerId))
+      .returning()
+    
+    if (!deleted) {
+      return NextResponse.json({ error: 'Customer not found' }, { status: 404 })
+    }
 
     return NextResponse.json({
       message: 'Customer deleted successfully',

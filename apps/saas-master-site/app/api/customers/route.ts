@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { customerT } from '@jobflow/db-tenant/schema'
+import { getTenantDbConnection } from '@jobflow/server'
 import { eq, ilike, or, and, sql, desc, asc } from 'drizzle-orm'
 
 // GET /api/customers - List customers with search, sort, filter
@@ -12,8 +13,7 @@ export async function GET(request: NextRequest) {
     const page = parseInt(searchParams.get('page') || '1')
     const limit = parseInt(searchParams.get('limit') || '10')
     
-    // Get tenant ID from middleware (TODO: implement tenant detection)
-    // For now, we'll use a placeholder
+    // Get tenant ID from middleware
     const tenantId = request.headers.get('x-tenant-id')
     
     if (!tenantId) {
@@ -21,26 +21,40 @@ export async function GET(request: NextRequest) {
     }
 
     // Get tenant database connection
-    // TODO: Implement getTenantDb function
-    // const db = await getTenantDb(tenantId)
+    const db = await getTenantDbConnection(parseInt(tenantId))
     
-    // For now, return mock data
-    const mockCustomers = [
-      {
-        customerId: 1,
-        customerFirstName: 'John',
-        customerLastName: 'Doe',
-        companyName: 'Acme Corp',
-        emailAddress: 'john@acme.com',
-        phoneNr: '555-0100',
-        customerSince: '2024-01-15',
-        customerSelected: false,
-      }
-    ]
+    // Build query
+    let query = db.select().from(customerT)
+    
+    // Apply search filter
+    if (search) {
+      query = query.where(
+        or(
+          ilike(customerT.customerFirstName, `%${search}%`),
+          ilike(customerT.customerLastName, `%${search}%`),
+          ilike(customerT.companyName, `%${search}%`),
+          ilike(customerT.emailAddress, `%${search}%`),
+          ilike(customerT.phoneNr, `%${search}%`)
+        )
+      ) as any
+    }
+    
+    // Apply sorting
+    const sortColumn = (customerT as any)[sortBy] || customerT.customerId
+    query = (sortOrder === 'asc' ? query.orderBy(asc(sortColumn)) : query.orderBy(desc(sortColumn))) as any
+    
+    // Apply pagination
+    const offset = (page - 1) * limit
+    query = query.limit(limit).offset(offset) as any
+    
+    const customers = await query
+    
+    // Get total count
+    const [{ count }] = await db.select({ count: sql<number>`count(*)` }).from(customerT)
 
     return NextResponse.json({
-      customers: mockCustomers,
-      total: 1,
+      customers,
+      total: Number(count),
       page,
       limit,
     })
@@ -60,12 +74,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Tenant not found' }, { status: 400 })
     }
 
-    // TODO: Validate body against CustomerT schema
-    // TODO: Get tenant database and insert customer
+    // Get tenant database connection
+    const db = await getTenantDbConnection(parseInt(tenantId))
+    
+    // Insert customer
+    const [customer] = await db.insert(customerT).values(body).returning()
     
     return NextResponse.json({
       message: 'Customer created successfully',
-      customer: { ...body, customerId: 1 },
+      customer,
     }, { status: 201 })
   } catch (error) {
     console.error('Error creating customer:', error)

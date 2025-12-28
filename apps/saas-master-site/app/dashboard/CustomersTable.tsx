@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@jobflow/shared/ui';
+import CustomerModal from './CustomerModal';
 
 const columns = [
   { key: 'customerId', label: 'ID' },
@@ -32,8 +33,10 @@ export default function CustomersTable() {
   const [sortKey, setSortKey] = useState('customerId');
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
   const [filter, setFilter] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCustomer, setSelectedCustomer] = useState<any | null>(null);
 
-  useEffect(() => {
+  const fetchCustomers = () => {
     setLoading(true);
     fetch('/api/customers')
       .then((r) => {
@@ -49,6 +52,10 @@ export default function CustomersTable() {
         console.error(err);
       })
       .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    fetchCustomers();
   }, []);
 
   const filtered = customers
@@ -75,11 +82,33 @@ export default function CustomersTable() {
     }
   };
 
+  const handleEdit = (customer: any) => {
+    setSelectedCustomer(customer);
+    setIsModalOpen(true);
+  };
+
+  const handleAdd = () => {
+    setSelectedCustomer(null);
+    setIsModalOpen(true);
+  };
+
+  const handleSave = (customer: any) => {
+    // Refresh the customers list after save
+    fetchCustomers();
+  };
+
   if (loading) return <div>Loading customers...</div>;
   if (error) return <div className="text-red-500">Error: {error}</div>;
 
   return (
     <div>
+      <CustomerModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        customer={selectedCustomer}
+        onSave={handleSave}
+      />
+      
       <div className="flex gap-2 mb-4">
         <input
           className="border p-2 rounded"
@@ -92,7 +121,7 @@ export default function CustomersTable() {
           <option value="true">Selected</option>
           <option value="false">Not Selected</option>
         </select>
-        <Button onClick={() => {/* TODO: open create modal */}}>Add Customer</Button>
+        <Button onClick={handleAdd}>Add Customer</Button>
       </div>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border rounded">
@@ -121,7 +150,7 @@ export default function CustomersTable() {
                   </td>
                 ))}
                 <td className="px-2 py-1 border-b space-x-2">
-                  <Button size="sm" onClick={() => {/* TODO: open edit modal */}}>Edit</Button>
+                  <Button size="sm" onClick={() => handleEdit(c)}>Edit</Button>
                   <Button size="sm" variant="destructive" onClick={() => handleDelete(c.customerId)}>Delete</Button>
                 </td>
               </tr>
