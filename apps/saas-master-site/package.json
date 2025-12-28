@@ -15,6 +15,7 @@
     "@jobflow/db-tenant": "workspace:*",
     "@jobflow/server": "workspace:*",
     "@jobflow/shared": "workspace:*",
+    "@neondatabase/api-client": "^2.6.0",
     "autoprefixer": "^10.4.0",
     "drizzle-orm": "^0.29.0",
     "next": "15.1.9",

@@ -1,1 +1,5 @@
-{}
+{
+  "/api/tenants/route": "app/api/tenants/route.js",
+  "/api/tenants/[id]/customers/route": "app/api/tenants/[id]/customers/route.js",
+  "/dashboard/page": "app/dashboard/page.js"
+}

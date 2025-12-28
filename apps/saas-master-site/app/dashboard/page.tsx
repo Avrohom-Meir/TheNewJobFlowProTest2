@@ -1,7 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
 import { Button } from '@jobflow/shared/ui'
+import { SidebarLayout } from './SidebarLayout'
 
 interface Tenant {
   id: number
@@ -31,24 +33,31 @@ export default function Dashboard() {
     subdomain: '',
     ownerEmail: ''
   })
+  const [mounted, setMounted] = useState(false)
 
   // Check if this is a tenant subdomain or query param
   const hostname = typeof window !== 'undefined' ? window.location.hostname : ''
   const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null
   const queryTenant = urlParams?.get('tenant')
   const baseDomain = 'localhost:3000'
-  const isTenantView = hostname.endsWith(`.${baseDomain}`) && !hostname.startsWith('app.') && hostname !== baseDomain || !!queryTenant
+  const isTenantView = mounted && (hostname.endsWith(`.${baseDomain}`) && !hostname.startsWith('app.') && hostname !== baseDomain || !!queryTenant)
   const tenantSubdomain = isTenantView ? (queryTenant || hostname.replace(`.${baseDomain}`, '')) : null
 
   useEffect(() => {
-    if (isTenantView && tenantSubdomain) {
-      // Tenant view: fetch tenant data
-      fetchTenantData(tenantSubdomain)
-    } else {
-      // Admin view: fetch all tenants
-      fetchTenants()
+    setMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (mounted) {
+      if (isTenantView && tenantSubdomain) {
+        // Tenant view: fetch tenant data
+        fetchTenantData(tenantSubdomain)
+      } else {
+        // Admin view: fetch all tenants
+        fetchTenants()
+      }
     }
-  }, [isTenantView, tenantSubdomain])
+  }, [mounted, isTenantView, tenantSubdomain])
 
   const fetchTenants = async () => {
     try {
@@ -161,6 +170,44 @@ export default function Dashboard() {
     }
   }
 
+  // Only wrap tenant view in sidebar layout
+  if (isTenantView) {
+    return (
+      <SidebarLayout>
+        <div className="max-w-7xl mx-auto">
+          <div className="flex justify-between items-center mb-8">
+            <h1 className="text-3xl font-bold text-gray-900">JobFlow - {tenantSubdomain}</h1>
+          </div>
+          {/* Main tenant dashboard content can go here */}
+          {tenantData && (
+            <div className="bg-white rounded-lg shadow-sm mt-8">
+              <div className="p-6 border-b">
+                <h2 className="text-xl font-semibold">Data for {tenantData.tenant}</h2>
+              </div>
+              <div className="p-6">
+                <h3 className="font-semibold mb-4">Customers ({tenantData.customers.length})</h3>
+                {tenantData.customers.length === 0 ? (
+                  <p className="text-gray-600">No customers yet</p>
+                ) : (
+                  <div className="grid gap-2">
+                    {tenantData.customers.map((customer: any) => (
+                      <div key={customer.id} className="border rounded p-3">
+                        <p><strong>{customer.firstName} {customer.lastName}</strong></p>
+                        <p className="text-sm text-gray-600">{customer.email}</p>
+                        <p className="text-sm text-gray-600">{customer.phone}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      </SidebarLayout>
+    )
+  }
+
+  // Admin view (default)
   return (
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-7xl mx-auto">

@@ -5,6 +5,7 @@ import { eq } from 'drizzle-orm'
 import postgres from 'postgres'
 import fs from 'fs'
 import path from 'path'
+import { createApiClient } from '@neondatabase/api-client'
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
@@ -49,7 +50,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Subdomain already exists' }, { status: 400 })
     }
 
-    // Create new tenant
+    // Create new tenant record first
     const newTenant = {
       name,
       subdomain,
@@ -62,17 +63,40 @@ export async function POST(request: NextRequest) {
     const result = await masterDb.insert(tenants).values(newTenant).returning()
     const tenant = result[0]
 
-    // Provision tenant database
+    // Provision tenant project/database using Neon API
     try {
-      const dbName = `tenant_${subdomain}`
-      const dbUrl = `postgresql://postgres:password@localhost:5432/${dbName}`
+      // In production, you'd create a separate Neon project per tenant
+      // For demo purposes, we're using the same Neon database with schema isolation
 
-      // Create database
+      const neonApi = createApiClient({
+        apiKey: process.env.NEON_API_KEY, // Would need to set this
+      })
+
+      // This would create a new project:
+      // const projectResponse = await neonApi.createProject({
+      //   project: {
+      //     name: `${name} - ${subdomain}`,
+      //     pg_version: 16,
+      //     region_id: 'aws-us-east-1', // or appropriate region
+      //   },
+      // })
+      // const project = projectResponse.data
+      // const connectionDetails = await neonApi.getConnectionDetails({
+      //   projectId: project.id,
+      //   branchId: project.default_branch_id,
+      // })
+      // const dbUrl = connectionDetails.data.connection_string
+
+      // For demo: simulate with schema-based approach
+      const schemaName = `tenant_${subdomain}`
+      const dbUrl = `postgresql://neondb_owner:npg_vCk0Ixu5gfrs@ep-plain-wildflower-aburknkd-pooler.eu-west-2.aws.neon.tech/neondb?sslmode=require&schema=${schemaName}`
+
+      // Create schema in the shared database
       const masterClient = postgres(process.env.MASTER_DB_URL!)
-      await masterClient`CREATE DATABASE ${masterClient.unsafe(dbName)}`
+      await masterClient`CREATE SCHEMA IF NOT EXISTS ${masterClient.unsafe(schemaName)}`
       await masterClient.end()
 
-      // Apply tenant schema
+      // Apply tenant schema to the new schema
       const tenantClient = postgres(dbUrl)
       const migrationPath = path.join(process.cwd(), '../../packages/db-tenant/drizzle/0000_colossal_blue_marvel.sql')
       const migrationSQL = fs.readFileSync(migrationPath, 'utf-8')
@@ -88,7 +112,7 @@ export async function POST(request: NextRequest) {
       // Insert into tenant_databases
       await masterDb.insert(tenantDatabases).values({
         tenantId: tenant.id,
-        neonDbIdentifier: dbName,
+        neonDbIdentifier: schemaName, // In production, this would be project.id
       })
 
     } catch (provisionError) {

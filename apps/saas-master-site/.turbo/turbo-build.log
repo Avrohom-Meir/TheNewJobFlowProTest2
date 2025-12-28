@@ -7,8 +7,13 @@
  [37m[1m [22m[39m Creating an optimized production build ...
 Failed to compile.
 
+./app/dashboard/page.tsx
+Module not found: Can't resolve '@jobflow/shared/ui'
+
+https://nextjs.org/docs/messages/module-not-found
+
 ./app/page.tsx
-Module not found: Can't resolve '../../packages/shared/dist/ui/index.mjs'
+Module not found: Can't resolve '@jobflow/shared/ui'
 
 https://nextjs.org/docs/messages/module-not-found
 
