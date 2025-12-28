@@ -20,6 +20,9 @@ export default function Home() {
         <h1 className="text-5xl font-bold text-gray-900 mb-6">
           Streamline Your Job Management
         </h1>
+        <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6 max-w-md mx-auto">
+          <p className="font-semibold">🚀 Server Running on Port: 3466</p>
+        </div>
         <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
           JobFlow is a comprehensive SaaS platform for managing jobs, customers, and field operations.
           Multi-tenant, secure, and built for scale.
