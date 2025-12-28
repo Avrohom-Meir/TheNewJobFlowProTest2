@@ -148,13 +148,39 @@ export async function POST(request: NextRequest) {
         );
         
         CREATE TABLE IF NOT EXISTS "JobT" (
-          "ID" serial PRIMARY KEY,
+          "JobID" serial PRIMARY KEY,
           "CustomerID" integer REFERENCES "CustomerT"("CustomerID"),
-          "StatusID" integer REFERENCES "HelperT"("ID"),
-          "TypeID" integer REFERENCES "HelperT"("ID"),
-          "Description" text,
-          "CreatedAt" timestamp DEFAULT now() NOT NULL,
-          "UpdatedAt" timestamp DEFAULT now() NOT NULL
+          "JobTypeID" integer REFERENCES "HelperT"("ID"),
+          "JobStatusID" integer REFERENCES "HelperT"("ID"),
+          "Contactdate" date,
+          "SiteAddress" text,
+          "SitePostCode" text,
+          "SiteCity" text,
+          "SitePointOfContact" text,
+          "PointOfContactNr" text,
+          "BuildingTypeID" integer REFERENCES "HelperT"("ID"),
+          "IsOccupied" boolean DEFAULT false,
+          "OfficeNotes" text,
+          "SurveyorNotes" text,
+          "FitterNotes" text,
+          "IsPaid" boolean DEFAULT false,
+          "InvoiceNumber" text,
+          "InvoiceSent" boolean DEFAULT false,
+          "WorkStartedOn" date,
+          "WorkCompletedOn" date,
+          "InvoiceToOwenerAndVerwaltung" boolean DEFAULT false,
+          "InvoiceAddress" text,
+          "AddedTextOnInvoiceHeader" text,
+          "InvoiceNumberPart" text,
+          "TaxFreeJob" boolean DEFAULT false,
+          "IsCreditInvoice" boolean DEFAULT false,
+          "CreditInvoiceForJobID" integer REFERENCES "JobT"("JobID"),
+          "JobOrderedBy" text,
+          "TenantNotes" text,
+          "SiteNotes" text,
+          "SiteAccessInstructions" text,
+          "JobSelected" boolean DEFAULT false,
+          "AddUnderAddress" text
         );
         
         -- Add other tables as needed

@@ -1,7 +1,9 @@
 import { masterDb } from './db'
 import { eq } from 'drizzle-orm'
-import { tenants } from '@jobflow/db-master'
-import { getTenantDb } from '@jobflow/db-tenant'
+import { tenants, tenantDatabases } from '@jobflow/db-master'
+import { drizzle } from 'drizzle-orm/postgres-js'
+import postgres from 'postgres'
+import * as tenantSchema from '@jobflow/db-tenant'
 
 export async function getTenantBySubdomain(subdomain: string) {
   const result = await masterDb
@@ -30,14 +32,32 @@ export async function getTenantById(id: number) {
 export async function getTenantDbConnection(tenantId: number) {
   const tenant = await getTenantById(tenantId)
   if (!tenant) throw new Error('Tenant not found')
-  
-  // If tenant has a specific dbUrl, use it
-  if (tenant.dbUrl) {
-    return getTenantDb(tenant.dbUrl)
+
+  // Determine schema name for this tenant.
+  // Prefer stored neonDbIdentifier in tenantDatabases; fallback to subdomain-based schema.
+  let schemaName: string | null = null
+  const mapping = await masterDb
+    .select()
+    .from(tenantDatabases)
+    .where(eq(tenantDatabases.tenantId, tenantId))
+    .limit(1)
+
+  if (mapping.length > 0) {
+    schemaName = mapping[0].neonDbIdentifier
+  } else if (tenant.subdomain) {
+    schemaName = `tenant_${tenant.subdomain}`
+  } else {
+    schemaName = `tenant_${tenantId}`
   }
-  
-  // Otherwise, use schema-per-tenant approach with master DB
-  const baseDbUrl = process.env.MASTER_DB_URL!
-  const schemaName = `tenant_${tenantId}`
-  return getTenantDb(`${baseDbUrl}?options=-c search_path%3D${schemaName}`)
+
+  const baseDbUrl = tenant.dbUrl || process.env.MASTER_DB_URL!
+
+  // Create a dedicated client, set search_path for the session, then wrap with drizzle.
+  const client = postgres(baseDbUrl)
+  if (schemaName) {
+    // Restrict to tenant schema only to avoid falling back to public
+    await client.unsafe(`SET search_path TO "${schemaName}"`)
+  }
+  const db = drizzle(client, { schema: tenantSchema })
+  return db
 }

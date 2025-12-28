@@ -1,5 +1,12 @@
 {
   "/api/tenants/route": "app/api/tenants/route.js",
   "/api/tenants/[id]/customers/route": "app/api/tenants/[id]/customers/route.js",
+  "/api/customers/[id]/jobs/route": "app/api/customers/[id]/jobs/route.js",
+  "/api/customers/route": "app/api/customers/route.js",
+  "/api/jobs/route": "app/api/jobs/route.js",
+  "/api/jobs/[id]/route": "app/api/jobs/[id]/route.js",
+  "/api/customers/[id]/route": "app/api/customers/[id]/route.js",
+  "/dashboard/customer/[id]/page": "app/dashboard/customer/[id]/page.js",
+  "/dashboard/job/[id]/page": "app/dashboard/job/[id]/page.js",
   "/dashboard/page": "app/dashboard/page.js"
 }

@@ -17,8 +17,16 @@ export async function middleware(request: NextRequest) {
       const tenant = await getTenantBySubdomain(subdomain)
       
       if (tenant) {
-        // Set tenant info in headers for the app to use
-        const response = NextResponse.next()
+        // Forward tenant info to downstream request
+        const requestHeaders = new Headers(request.headers)
+        requestHeaders.set('x-tenant-subdomain', subdomain)
+        requestHeaders.set('x-tenant-id', tenant.id.toString())
+        requestHeaders.set('x-tenant-name', tenant.name)
+
+        const response = NextResponse.next({
+          request: { headers: requestHeaders },
+        })
+        // Also mirror on response for client-side reads if needed
         response.headers.set('x-tenant-subdomain', subdomain)
         response.headers.set('x-tenant-id', tenant.id.toString())
         response.headers.set('x-tenant-name', tenant.name)
@@ -27,6 +35,19 @@ export async function middleware(request: NextRequest) {
         // Tenant not found, redirect to main site or show error
         return NextResponse.redirect(new URL('/', request.url))
       }
+    }
+  }
+
+  // For localhost (local dev without subdomain), check for tenant ID in cookies or session
+  if (hostname.includes('localhost') || hostname.includes('github.dev') || hostname.includes('gitpod')) {
+    // Try to get tenant ID from cookie and forward to request headers
+    const tenantIdCookie = request.cookies.get('tenantId')?.value
+    if (tenantIdCookie) {
+      const requestHeaders = new Headers(request.headers)
+      requestHeaders.set('x-tenant-id', tenantIdCookie)
+      const response = NextResponse.next({ request: { headers: requestHeaders } })
+      response.headers.set('x-tenant-id', tenantIdCookie)
+      return response
     }
   }
 

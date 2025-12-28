@@ -67,13 +67,13 @@ export async function PUT(
       return NextResponse.json({ error: 'Customer not found' }, { status: 404 })
     }
 
-    return NextResponse.json({
-      message: 'Customer updated successfully',
-      customer: updated,
-    })
+    return NextResponse.json(updated)
   } catch (error) {
-    console.error('Error updating customer:', error)
-    return NextResponse.json({ error: 'Failed to update customer' }, { status: 500 })
+    console.error('Error updating customer:', error instanceof Error ? error.message : error)
+    return NextResponse.json({ 
+      error: 'Failed to update customer',
+      details: error instanceof Error ? error.message : String(error)
+    }, { status: 500 })
   }
 }
 

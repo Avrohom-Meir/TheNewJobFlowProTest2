@@ -1,9 +1,11 @@
+"use client";
 
 import { ReactNode, useState } from 'react';
 import { Button } from '@jobflow/shared/ui';
 
 
 import CustomersTable from './CustomersTable';
+import TenantSelector from './TenantSelector';
 
 interface SidebarProps {
   children?: ReactNode;
@@ -13,7 +15,9 @@ export function SidebarLayout({ children }: SidebarProps) {
   const [collapsed, setCollapsed] = useState(false);
   const [active, setActive] = useState<'Customers' | 'Jobs' | 'Settings'>('Customers');
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen flex-col">
+      <TenantSelector />
+      <div className="flex flex-1">
       <aside className={`bg-white shadow-md transition-all duration-200 ${collapsed ? 'w-16' : 'w-56'} flex flex-col`}>
         <div className="flex items-center justify-between h-16 px-4 border-b">
           <span className={`font-bold text-lg transition-opacity duration-200 ${collapsed ? 'opacity-0 w-0' : 'opacity-100 w-auto'}`}>JobFlow</span>
@@ -38,6 +42,7 @@ export function SidebarLayout({ children }: SidebarProps) {
       <main className="flex-1 bg-gray-50 p-8">
         {active === 'Customers' ? <CustomersTable /> : children}
       </main>
+    </div>
     </div>
   );
 }
