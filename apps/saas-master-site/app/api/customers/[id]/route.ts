@@ -6,16 +6,17 @@ import { eq } from 'drizzle-orm'
 // GET /api/customers/[id] - Get a single customer
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const tenantId = request.headers.get('x-tenant-id')
     
     if (!tenantId) {
       return NextResponse.json({ error: 'Tenant not found' }, { status: 400 })
     }
 
-    const customerId = parseInt(params.id)
+    const customerId = parseInt(id)
     
     // Get tenant database connection
     const db = await getTenantDbConnection(parseInt(tenantId))
@@ -40,9 +41,10 @@ export async function GET(
 // PUT /api/customers/[id] - Update a customer
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const body = await request.json()
     const tenantId = request.headers.get('x-tenant-id')
     
@@ -50,7 +52,7 @@ export async function PUT(
       return NextResponse.json({ error: 'Tenant not found' }, { status: 400 })
     }
 
-    const customerId = parseInt(params.id)
+    const customerId = parseInt(id)
     
     // Get tenant database connection
     const db = await getTenantDbConnection(parseInt(tenantId))
@@ -78,16 +80,17 @@ export async function PUT(
 // DELETE /api/customers/[id] - Delete a customer
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const tenantId = request.headers.get('x-tenant-id')
     
     if (!tenantId) {
       return NextResponse.json({ error: 'Tenant not found' }, { status: 400 })
     }
 
-    const customerId = parseInt(params.id)
+    const customerId = parseInt(id)
     
     // Get tenant database connection
     const db = await getTenantDbConnection(parseInt(tenantId))

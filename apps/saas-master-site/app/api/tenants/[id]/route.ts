@@ -6,10 +6,11 @@ import postgres from 'postgres'
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const tenantId = parseInt(params.id)
+    const { id } = await params
+    const tenantId = parseInt(id)
     const { status } = await request.json()
 
     if (!status) {
@@ -30,10 +31,11 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const tenantId = parseInt(params.id)
+    const { id } = await params
+    const tenantId = parseInt(id)
 
     // Get tenant info
     const tenantResult = await masterDb

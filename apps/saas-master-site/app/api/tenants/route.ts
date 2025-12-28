@@ -89,15 +89,17 @@ export async function POST(request: NextRequest) {
 
       // For demo: simulate with schema-based approach
       const schemaName = `tenant_${subdomain}`
-      const dbUrl = `postgresql://neondb_owner:npg_vCk0Ixu5gfrs@ep-plain-wildflower-aburknkd-pooler.eu-west-2.aws.neon.tech/neondb?sslmode=require&options=-c%20search_path%3D${schemaName}`
+      // Don't include search_path in URL for Neon - set it after connection
+      const dbUrl = `postgresql://neondb_owner:npg_vCk0Ixu5gfrs@ep-plain-wildflower-aburknkd-pooler.eu-west-2.aws.neon.tech/neondb?sslmode=require`
 
       // Create schema in the shared database
       const masterClient = postgres(process.env.MASTER_DB_URL!)
       await masterClient`CREATE SCHEMA IF NOT EXISTS ${masterClient.unsafe(schemaName)}`
-      
+      await masterClient.end()
+
       // Set search path and create tables using Drizzle
       const tenantClient = postgres(dbUrl)
-      await tenantClient`SET search_path TO ${tenantClient.unsafe(schemaName)}`
+      await tenantClient.unsafe(`SET search_path TO "${schemaName}", public`)
       
       // Import and use the current schema directly
       const { migrate } = await import('drizzle-orm/postgres-js/migrator')
