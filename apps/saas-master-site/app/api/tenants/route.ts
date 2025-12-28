@@ -98,7 +98,7 @@ export async function POST(request: NextRequest) {
 
       // Apply tenant schema to the new schema using Drizzle
       const { drizzle } = await import('drizzle-orm/postgres-js')
-      const * as schema from '@jobflow/db-tenant/schema'
+      const schema = await import('@jobflow/db-tenant/schema')
       const tenantClient = postgres(dbUrl)
       const db = drizzle(tenantClient, { schema })
       
